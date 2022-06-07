@@ -1,9 +1,25 @@
 {
-  "name": "text-columns",
-  "id": "1115768373513319344",
-  "api": "1.0.0",
-  "main": "code.js",
-  "editorType": [
-    "figma"
-  ]
+    "name": "Text Columns",
+    "id": "1115768373513319344",
+    "api": "1.0.0",
+    "main": "code.js",
+    "parameters": [
+        {
+            "name": "Columns",
+            "key": "numColumns",
+            "description": "Enter the number of columns you want to use (in pixels)"
+        },
+        {
+            "name": "Spacing",
+            "key": "spacing",
+            "description": "Enter the spacing between columns (in pixels)"
+        },
+        {
+            "name": "Column Width",
+            "key": "colWidth",
+            "description": "Enter the width of each column (in pixels)",
+            "optional": true
+        }
+    ],
+    "editorType": ["figma"]
 }
