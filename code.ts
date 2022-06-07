@@ -63,11 +63,6 @@ const __getParameterSuggestions = (key: string): string[] => {
     }[key];
 };
 
-const __handleText = (textBox: TextNode): string => {
-    const text: string = textBox.characters;
-    return text;
-};
-
 const _parseParameters = (
     textBox: TextNode,
     numColumns: string,
@@ -77,7 +72,12 @@ const _parseParameters = (
     const parameters = {
         numColumns: parseInt(numColumns),
         spacing: parseInt(spacing),
-        text: __handleText(textBox),
+        textBox: {
+            text: textBox.characters,
+            posX: textBox.x,
+            posY: textBox.y,
+            width: textBox.width,
+        },
         colWidth: colWidth ? parseInt(colWidth) : 'auto',
     };
 
@@ -88,7 +88,6 @@ const runPlugin = (textBox: TextNode): void => {
     figma.parameters.on(
         'input',
         ({ key, query, result }: ParameterInputEvent) => {
-            console.log(key);
             // TODO: Add 'px' to suggetions
             result.setSuggestions(
                 __getParameterSuggestions(key).filter((s) => s.includes(query))
