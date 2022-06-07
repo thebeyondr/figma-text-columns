@@ -1,7 +1,7 @@
 {
     "name": "text-columns",
     "version": "1.0.0",
-    "description": "Your Figma Plugin",
+    "description": "A Figma plugin for splitting long text into columns.",
     "main": "code.js",
     "scripts": {
         "build": "tsc -p tsconfig.json",

@@ -1,6 +1,6 @@
 # ▥ Text Columns ▥
 
-A plugin for Figma that allows you to split large text into columns.
+A Figma plugin for splitting long text into columns.
 
 ## How to use
 
