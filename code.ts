@@ -1,8 +1,5 @@
 // This plugin is used to format text into columns
 
-// figma.showUI(__html__);
-
-// const nodes: SceneNode[] = [];
 const __getParameterSuggestions = (key: string): string[] => {
     return {
         numColumns: ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
@@ -73,6 +70,7 @@ const _parseParameters = (
         numColumns: parseInt(numColumns),
         spacing: parseInt(spacing),
         textBox: {
+            // TODO: Add text sanitization
             text: textBox.characters,
             posX: textBox.x,
             posY: textBox.y,
@@ -108,6 +106,12 @@ const runPlugin = (textBox: TextNode): void => {
         }
 
         _parseParameters(textBox, numColumns, spacing, colWidth);
+        // TODO: Load fonts
+        // TODO: Create text nodes
+        // TODO: Create auto-layout with spacing/column width
+        // TODO: Place auto-layout frame at original coordinates
+        // TODO: Highlight auto-layout frame
+        // TODO: Zoom to auto-layout frame
     });
 };
 
@@ -134,20 +138,6 @@ const __checkSelection = (): void => {
 };
 
 __checkSelection();
-// const messageActions = {
-//     close: () => {
-//         figma.closePlugin();
-//     },
-//     createTextColumns: () => {
-//         console.log('createTextColumns');
-//     },
-// };
-
-// figma.ui.onmessage = (msg: string) => {
-//     messageActions[msg]() || messageActions['close']();
-// };
 
 // figma.currentPage.selection = nodes;
 // figma.viewport.scrollAndZoomIntoView(nodes);
-
-// figma.closePlugin();
