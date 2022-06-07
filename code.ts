@@ -1,21 +1,154 @@
-// This plugin creates 5 rectangles on the screen.
-const numberOfRectangles = 5
+// This plugin is used to format text into columns
 
-// This file holds the main code for the plugins. It has access to the *document*.
-// You can access browser APIs such as the network by creating a UI which contains
-// a full browser environment (see documentation).
+// figma.showUI(__html__);
 
-const nodes: SceneNode[] = [];
-for (let i = 0; i < numberOfRectangles; i++) {
-  const rect = figma.createRectangle();
-  rect.x = i * 150;
-  rect.fills = [{type: 'SOLID', color: {r: 1, g: 0.5, b: 0}}];
-  figma.currentPage.appendChild(rect);
-  nodes.push(rect);
-}
-figma.currentPage.selection = nodes;
-figma.viewport.scrollAndZoomIntoView(nodes);
+// const nodes: SceneNode[] = [];
+const __getParameterSuggestions = (key: string): string[] => {
+    return {
+        numColumns: ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+        spacing: [
+            '8',
+            '16',
+            '24',
+            '32',
+            '40',
+            '48',
+            '56',
+            '64',
+            '72',
+            '80',
+            '88',
+            '96',
+            '104',
+            '112',
+            '120',
+            '128',
+            '136',
+            '144',
+            '152',
+            '160',
+            '168',
+            '176',
+            '184',
+            '192',
+            '200',
+            '208',
+            '216',
+            '224',
+            '232',
+            '240',
+            '248',
+            '256',
+        ],
+        colWidth: [
+            '120',
+            '128',
+            '136',
+            '144',
+            '152',
+            '160',
+            '168',
+            '176',
+            '184',
+            '192',
+            '200',
+            '208',
+            '216',
+            '224',
+            '232',
+            '240',
+            '248',
+            '256',
+        ],
+    }[key];
+};
 
-// Make sure to close the plugin when you're done. Otherwise the plugin will
-// keep running, which shows the cancel button at the bottom of the screen.
-figma.closePlugin();
+const __handleText = (textBox: TextNode): string => {
+    const text: string = textBox.characters;
+    return text;
+};
+
+const _parseParameters = (
+    textBox: TextNode,
+    numColumns: string,
+    spacing: string,
+    colWidth: string
+): void => {
+    const parameters = {
+        numColumns: parseInt(numColumns),
+        spacing: parseInt(spacing),
+        text: __handleText(textBox),
+        colWidth: colWidth ? parseInt(colWidth) : 'auto',
+    };
+
+    console.log(parameters);
+};
+
+const runPlugin = (textBox: TextNode): void => {
+    figma.parameters.on(
+        'input',
+        ({ key, query, result }: ParameterInputEvent) => {
+            console.log(key);
+            // TODO: Add 'px' to suggetions
+            result.setSuggestions(
+                __getParameterSuggestions(key).filter((s) => s.includes(query))
+            );
+        }
+    );
+
+    figma.on('run', ({ parameters }: RunEvent) => {
+        if (parameters === undefined) {
+            figma.closePlugin('Please enter parameters and try again 😢');
+            return;
+        }
+
+        const { numColumns, spacing, colWidth } = parameters;
+        if (!numColumns || !spacing) {
+            figma.closePlugin('Please enter parameters and try again 😢');
+            return;
+        }
+
+        _parseParameters(textBox, numColumns, spacing, colWidth);
+    });
+};
+
+const __checkSelection = (): void => {
+    let numErrors: number = 0;
+    const currentSelection = figma.currentPage.selection;
+
+    if (currentSelection.length !== 1) {
+        numErrors++;
+    }
+
+    if (currentSelection[0] && currentSelection[0].type !== 'TEXT') {
+        numErrors++;
+    }
+
+    if (numErrors > 0) {
+        figma.closePlugin('Select ONE box with TEXT in it and try again 😢');
+        return;
+    }
+
+    const textNode = currentSelection[0] as TextNode;
+    textNode.getRangeFontName(0, 5);
+    runPlugin(textNode);
+};
+
+__checkSelection();
+// const messageActions = {
+//     close: () => {
+//         figma.closePlugin();
+//     },
+//     createTextColumns: () => {
+//         console.log('createTextColumns');
+//     },
+// };
+
+// figma.ui.onmessage = (msg: string) => {
+//     messageActions[msg]() || messageActions['close']();
+// };
+
+// figma.currentPage.selection = nodes;
+// figma.viewport.scrollAndZoomIntoView(nodes);
+
+// figma.closePlugin();
